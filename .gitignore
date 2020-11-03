@@ -8,7 +8,7 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/
-/sdk
+/app/src/main/cpp/CMakeLists.txt
 .DS_Store
 /build
 /captures

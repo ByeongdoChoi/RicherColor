@@ -1,18 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:opencv="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <org.opencv.android.JavaCameraView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="설정" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="30dp"
+            android:text="리처 컬러"/>
+
+        <Button
+            android:id="@+id/color_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="색맹 테스트" />
+    </RelativeLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        opencv:camera_id="any"
-        android:visibility="gone"
-        android:id="@+id/activity_surface_view" />
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center">
 
+        <Button
+            android:id="@+id/take_photo_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 촬영" />
+
+        <Button
+            android:id="@+id/get_photo_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앨범 선택" />
+
+        <Button
+            android:id="@+id/view_art"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="명화 감상" />
+
+        <Button
+            android:id="@+id/test_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진 테스트" />
+
+    </LinearLayout>
 </LinearLayout>
