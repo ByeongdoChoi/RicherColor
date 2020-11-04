@@ -3,25 +3,31 @@ package com.example.richercolor;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.skydoves.balloon.Balloon;
 import com.skydoves.balloon.BalloonAnimation;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Album extends AppCompatActivity {
 
@@ -29,12 +35,22 @@ public class Album extends AppCompatActivity {
     Bitmap albumImage;      // 앨범에서 불러온 사진을 비트맵 담을 객체
     float touchX, touchY;   // 사진에서 터치하는 좌표
 
+    private SeekBar seekBarRed;
+    private SeekBar seekBarGreen;
+    private SeekBar seekBarBlue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
 
         imageView = findViewById(R.id.imageView);
+
+        seekBarRed = findViewById(R.id.seekBarRed);
+        seekBarGreen = findViewById(R.id.seekBarGreen);
+        seekBarBlue = findViewById(R.id.seekBarBlue);
+
+        setSeekBarEvent();
 
         getImage();
 
@@ -53,7 +69,8 @@ public class Album extends AppCompatActivity {
                     int R = Color.red(rgb);
                     int G = Color.green(rgb);
                     int B = Color.blue(rgb);
-                    Log.d("Album ", "X " + touchX + " Y " + touchY + " rgb " + rgb);
+                    Log.d("Album ", "album width " + albumImage.getWidth() + " album Height " + albumImage.getHeight());
+                    Log.d("Album ", "touch X " + touchX + "touch Y " + touchY + " rgb " + rgb);
                     Log.d("Album ", "R " + R + " G " + G + " B " + B);
 
                     // 좌표에 툴팁을 띄운다.
@@ -67,10 +84,78 @@ public class Album extends AppCompatActivity {
                             .setBackgroundColor(Color.rgb(100, 228, 44))
                             .setBalloonAnimation(BalloonAnimation.FADE)
                             .build();
-                    ballon.show(v, (int)touchX, (0 - (int)touchY));
+                    if (touchY > albumImage.getHeight() / 2)
+                        ballon.show(v, (int)touchX, ((int)touchY));
+                    else
+                        ballon.show(v, (int)touchX, ((int)touchY) - albumImage.getHeight());
                 }
 
                 return false;
+            }
+        });
+    }
+
+    private void setSeekBarEvent() {
+        seekBarRed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = seekBarRed.getProgress();
+                int green = seekBarGreen.getProgress();
+                int blue = seekBarBlue.getProgress();
+                imageView.setColorFilter(Color.rgb(red,green,blue), PorterDuff.Mode.LIGHTEN);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBarGreen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = seekBarRed.getProgress();
+                int green = seekBarGreen.getProgress();
+                int blue = seekBarBlue.getProgress();
+                imageView.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBarBlue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = seekBarRed.getProgress();
+                int green = seekBarGreen.getProgress();
+                int blue = seekBarBlue.getProgress();
+                imageView.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
@@ -89,38 +174,38 @@ public class Album extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Log.d("Album ", "결과 받아옴");
 
-                // 선택한 이미지를 지칭하는 Uri 객체를 얻어옴
-                Uri uri = data.getData();
-                // Uri 객체를 통해서 컨텐츠 프로바이덜르 통해 이미지 정보를 가져온다.
-                ContentResolver resolver = getContentResolver();
-                Cursor cursor = resolver.query(uri, null, null, null, null);
-                cursor.moveToNext();
+                    // 선택한 이미지를 지칭하는 Uri 객체를 얻어옴
+                    Uri uri = data.getData();
+                    // Uri 객체를 통해서 컨텐츠 프로바이덜르 통해 이미지 정보를 가져온다.
+                    ContentResolver resolver = getContentResolver();
+                    Cursor cursor = resolver.query(uri, null, null, null, null);
+                    cursor.moveToNext();
 
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-                Uri newUri = Uri.fromFile(new File(path));
-                Log.d("Album ", " newUri " + newUri.getPath());
+                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+                    Uri newUri = Uri.fromFile(new File(path));
+                    Log.d("Album ", " newUri " + newUri.getPath());
 
-                // 사용자가 선택한 이미지 경로를 가져옴
-                int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                String source = cursor.getString(index);
-                Log.d("Album ", " source " + source);
+                    // 사용자가 선택한 이미지 경로를 가져옴
+                    int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                    String source = cursor.getString(index);
+                    Log.d("Album ", " source " + source);
 
-                // 이미지 객체 생성
-                Bitmap bitmap = BitmapFactory.decodeFile(source);
-                Log.d("Album ", " bitmap " + bitmap);
+                    // 이미지 객체 생성
+                    Bitmap bitmap = BitmapFactory.decodeFile(source);
+                    Log.d("Album ", " bitmap " + bitmap);
 
 
-                // 이미지 크기 조정
-                Bitmap bitmap2 = resizeBitmap(1024, bitmap);
+                    // 이미지 크기 조정
+                    Bitmap bitmap2 = resizeBitmap(1024, bitmap);
 
-                // 회전 각도 값 가져옴
-                float degree = getDegree(source);
-                Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
+                    // 회전 각도 값 가져옴
+                    float degree = getDegree(source);
+                    Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
 
-                albumImage = bitmap3;
-                imageView.setImageBitmap(albumImage);
+                    albumImage = bitmap3;
+                    imageView.setImageBitmap(albumImage);
+                }
 
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
