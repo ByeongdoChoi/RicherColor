@@ -53,6 +53,12 @@
             android:layout_height="wrap_content"
             android:text="초파 바꾸기" />
 
+        <Button
+            android:id="@+id/btn_color_change4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="조광식 테스트" />
+
     </LinearLayout>
 
 
