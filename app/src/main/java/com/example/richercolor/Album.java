@@ -3,6 +3,7 @@ package com.example.richercolor;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,7 +12,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,6 +25,7 @@ import com.skydoves.balloon.Balloon;
 import com.skydoves.balloon.BalloonAnimation;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Album extends AppCompatActivity {
 
@@ -89,38 +93,38 @@ public class Album extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Log.d("Album ", "결과 받아옴");
 
-                // 선택한 이미지를 지칭하는 Uri 객체를 얻어옴
-                Uri uri = data.getData();
-                // Uri 객체를 통해서 컨텐츠 프로바이덜르 통해 이미지 정보를 가져온다.
-                ContentResolver resolver = getContentResolver();
-                Cursor cursor = resolver.query(uri, null, null, null, null);
-                cursor.moveToNext();
+                    // 선택한 이미지를 지칭하는 Uri 객체를 얻어옴
+                    Uri uri = data.getData();
+                    // Uri 객체를 통해서 컨텐츠 프로바이덜르 통해 이미지 정보를 가져온다.
+                    ContentResolver resolver = getContentResolver();
+                    Cursor cursor = resolver.query(uri, null, null, null, null);
+                    cursor.moveToNext();
 
-                String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-                Uri newUri = Uri.fromFile(new File(path));
-                Log.d("Album ", " newUri " + newUri.getPath());
+                    String path = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+                    Uri newUri = Uri.fromFile(new File(path));
+                    Log.d("Album ", " newUri " + newUri.getPath());
 
-                // 사용자가 선택한 이미지 경로를 가져옴
-                int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                String source = cursor.getString(index);
-                Log.d("Album ", " source " + source);
+                    // 사용자가 선택한 이미지 경로를 가져옴
+                    int index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                    String source = cursor.getString(index);
+                    Log.d("Album ", " source " + source);
 
-                // 이미지 객체 생성
-                Bitmap bitmap = BitmapFactory.decodeFile(source);
-                Log.d("Album ", " bitmap " + bitmap);
+                    // 이미지 객체 생성
+                    Bitmap bitmap = BitmapFactory.decodeFile(source);
+                    Log.d("Album ", " bitmap " + bitmap);
 
 
-                // 이미지 크기 조정
-                Bitmap bitmap2 = resizeBitmap(1024, bitmap);
+                    // 이미지 크기 조정
+                    Bitmap bitmap2 = resizeBitmap(1024, bitmap);
 
-                // 회전 각도 값 가져옴
-                float degree = getDegree(source);
-                Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
+                    // 회전 각도 값 가져옴
+                    float degree = getDegree(source);
+                    Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
 
-                albumImage = bitmap3;
-                imageView.setImageBitmap(albumImage);
+                    albumImage = bitmap3;
+                    imageView.setImageBitmap(albumImage);
+                }
 
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

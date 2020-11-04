@@ -7,29 +7,82 @@
     android:orientation="vertical"
     tools:context=".Album">
 
-    <RelativeLayout
-        android:id="@+id/album_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="3">
+
         <ImageView
             android:id="@+id/imageView"
-            android:layout_alignParentTop="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="#000000"
             android:src="@drawable/ic_launcher_foreground" />
 
-        <TextView
-            android:id="@+id/chooseColorMame"
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dd" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            android:text="선택한 색깔"/>
-    </RelativeLayout>
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="버튼1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="버튼2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="버튼3" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="버튼4" />
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <SeekBar
+                android:id="@+id/seekBarred"
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:max="255"/>
 
+            <SeekBar
+                android:id="@+id/seekBargreen"
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:max="255"/>
 
+            <SeekBar
+                android:id="@+id/seekBarblue"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:max="255"/>
 
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
