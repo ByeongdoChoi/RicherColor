@@ -66,19 +66,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <SeekBar
-                android:id="@+id/seekBarred"
+                android:id="@+id/seekBarRed"
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
                 android:max="255"/>
 
             <SeekBar
-                android:id="@+id/seekBargreen"
+                android:id="@+id/seekBarGreen"
                 android:layout_width="match_parent"
                 android:layout_height="37dp"
                 android:max="255"/>
 
             <SeekBar
-                android:id="@+id/seekBarblue"
+                android:id="@+id/seekBarBlue"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:max="255"/>

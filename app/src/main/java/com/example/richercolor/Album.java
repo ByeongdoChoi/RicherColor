@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.skydoves.balloon.Balloon;
 import com.skydoves.balloon.BalloonAnimation;
@@ -33,12 +35,22 @@ public class Album extends AppCompatActivity {
     Bitmap albumImage;      // 앨범에서 불러온 사진을 비트맵 담을 객체
     float touchX, touchY;   // 사진에서 터치하는 좌표
 
+    private SeekBar seekBarRed;
+    private SeekBar seekBarGreen;
+    private SeekBar seekBarBlue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
 
         imageView = findViewById(R.id.imageView);
+
+        seekBarRed = findViewById(R.id.seekBarRed);
+        seekBarGreen = findViewById(R.id.seekBarGreen);
+        seekBarBlue = findViewById(R.id.seekBarBlue);
+
+        setSeekBarEvent();
 
         getImage();
 
@@ -75,6 +87,71 @@ public class Album extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+    }
+
+    private void setSeekBarEvent() {
+        seekBarRed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = seekBarRed.getProgress();
+                int green = seekBarGreen.getProgress();
+                int blue = seekBarBlue.getProgress();
+                imageView.setColorFilter(Color.rgb(red,green,blue), PorterDuff.Mode.LIGHTEN);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBarGreen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = seekBarRed.getProgress();
+                int green = seekBarGreen.getProgress();
+                int blue = seekBarBlue.getProgress();
+                imageView.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        seekBarBlue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = seekBarRed.getProgress();
+                int green = seekBarGreen.getProgress();
+                int blue = seekBarBlue.getProgress();
+                imageView.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
