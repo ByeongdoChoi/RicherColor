@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import com.skydoves.balloon.Balloon;
@@ -39,19 +40,20 @@ public class Album extends AppCompatActivity {
     private SeekBar seekBarGreen;
     private SeekBar seekBarBlue;
 
+    private LinearLayout container;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
 
         imageView = findViewById(R.id.imageView);
-
+        container = findViewById(R.id.album_container);
         seekBarRed = findViewById(R.id.seekBarRed);
         seekBarGreen = findViewById(R.id.seekBarGreen);
         seekBarBlue = findViewById(R.id.seekBarBlue);
 
         setSeekBarEvent();
-
         getImage();
 
         // 이미지뷰 터치했을때
@@ -84,10 +86,7 @@ public class Album extends AppCompatActivity {
                             .setBackgroundColor(Color.rgb(100, 228, 44))
                             .setBalloonAnimation(BalloonAnimation.FADE)
                             .build();
-                    if (touchY > albumImage.getHeight() / 2)
-                        ballon.show(v, (int)touchX, ((int)touchY));
-                    else
-                        ballon.show(v, (int)touchX, ((int)touchY) - albumImage.getHeight());
+                    ballon.show(v, (int)touchX, (int)touchY);
                 }
 
                 return false;

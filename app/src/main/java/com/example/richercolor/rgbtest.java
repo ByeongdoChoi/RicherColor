@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.ColorSpace;
 import android.graphics.Paint;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
@@ -20,6 +21,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
+import java.io.ByteArrayOutputStream;
+
 public class rgbtest extends AppCompatActivity {
 
     private ImageView imgtest;
@@ -30,6 +40,13 @@ public class rgbtest extends AppCompatActivity {
 
     Button button, button2, button3;
     Button button4;
+
+    Scalar lower_blue = new Scalar(110, 100, 100);
+    Scalar upper_blue = new Scalar(130, 255, 255);
+    Scalar lower_green = new Scalar(50, 100, 100);
+    Scalar upper_green = new Scalar(70, 255, 255);
+    Scalar lower_red = new Scalar(-10, 100, 100);
+    Scalar upper_red = new Scalar(10, 255, 255);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,16 +158,71 @@ public class rgbtest extends AppCompatActivity {
 
                 imgtest.setImageResource(R.drawable.cow);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+
+                // 이미지 크기 조정
                 Bitmap bitmap2 = resizeBitmap(512, bitmap);
 
-                int w = bitmap2.getWidth();
+                /*int w = bitmap2.getWidth();
                 int h = bitmap2.getHeight();
 
                 int size = w*h;
-
                 int[] pixels = new int[size];
+                bitmap2.getPixels(pixels, 0, w, 0, 0, w, h);*/
 
-                bitmap2.getPixels(pixels, 0, w, 0, 0, w, h);
+                // bitmap2를 Mat 객체로 변환
+                Mat original = new Mat (bitmap2.getWidth(), bitmap2.getHeight(), CvType.CV_8UC3);
+                Utils.bitmapToMat(bitmap2, original);
+
+                // rgb를 hsv 변환
+                Mat hsv_original = new Mat();
+                Imgproc.cvtColor(original, hsv_original, Imgproc.COLOR_RGB2HSV);
+
+                // 빨간색 영역을 구하는 마스크 생성
+                Mat mask = new Mat();
+                Core.inRange(hsv_original, lower_red, upper_red, mask);
+
+                // 빨간색 영역만 구한 사진
+                Mat change = new Mat();
+                Core.bitwise_and(hsv_original, hsv_original, change, mask);
+
+                // 빨간색 영역을 제외한 사진
+                Mat unChange = new Mat();
+                Core.bitwise_xor(hsv_original, change, unChange);
+
+                // 여기서 오류
+                // 빨간색 영역을 다른 색으로 바꾼다.
+                Mat result = new Mat();
+                Imgproc.cvtColor(change, change, Color.rgb(0, 255, 0));
+
+                // unchange와 change를 합쳐서 result에 저장
+                Core.bitwise_or(change, unChange, result);
+
+                // result 그림을 다시 rgb로 바꿈
+                Imgproc.cvtColor(result, result, Imgproc.COLOR_HSV2RGB);
+
+                // Mat 객체를 Bitmap 객체로 바꿈
+                Utils.matToBitmap(result, bitmap2);
+
+                imgtest.setImageBitmap(bitmap2);
+
+                /*Mat input = new Mat();
+                Bitmap bmp32 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
+                Utils.bitmapToMat(bmp32, input);
+
+                Mat bgrMat = new Mat();
+
+                Imgproc.cvtColor(input, bgrMat, Imgproc.COLOR_RGB2HSV);
+
+                Mat hsvMat = new Mat();
+
+                Imgproc.cvtColor(bgrMat, hsvMat, Imgproc.COLOR_BGR2HSV);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                Bitmap image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+                Utils.matToBitmap(hsvMat, image);*/
 
                 /*
                 Log.d("rgbtest", ""+pixels.length);
@@ -158,7 +230,7 @@ public class rgbtest extends AppCompatActivity {
                     Log.d("rgbtest", "pixels"+i + " " + pixels[i]);
                 }*/
 
-                for(int i=0; i<size; i++)
+                /*for(int i=0; i<size; i++)
                 {
                     int color = pixels[i];
 
@@ -166,28 +238,17 @@ public class rgbtest extends AppCompatActivity {
                     int g = (color >> 8) & 0xFF;
                     int b = (color) & 0xFF;
 
-                    color |= 0x00 << 16;
-                    color |= 0xFF << 8;
-                    color |= 0x00;
+                    Log.d("rgbtest", "r"+i + " " + r);
+                    Log.d("rgbtest", "g"+i + " " + g);
+                    Log.d("rgbtest", "b"+i + " " + b);
 
-                    int r2 = (color >> 16) & 0xFF;
-                    int g2 = (color >> 8) & 0xFF;
-                    int b2 = (color) & 0xFF;
+                    Log.d("rgbtest", "pixels"+i + " " + color);
 
-                    Log.d("rgbtest", "r2"+i + " " + r2);
-                    Log.d("rgbtest", "g2"+i + " " + g2);
-                    Log.d("rgbtest", "b2"+i + " " + b2);
+                }*/
 
-                    pixels[i] = color;
-
-                }
-                bitmap2.setPixels(pixels, 0, w, 0, 0, w, h);
-
-                imgtest.setImageBitmap(bitmap2);
 
             }
         });
-
     }
 
     public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
@@ -198,5 +259,7 @@ public class rgbtest extends AppCompatActivity {
             source.recycle();
         return result;
     }
+
+
 
 }
