@@ -141,15 +141,16 @@ public class rgbtest extends AppCompatActivity {
 
                 imgtest.setImageResource(R.drawable.cow);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+                Bitmap bitmap2 = resizeBitmap(512, bitmap);
 
-                int w = bitmap.getWidth();
-                int h = bitmap.getHeight();
+                int w = bitmap2.getWidth();
+                int h = bitmap2.getHeight();
 
                 int size = w*h;
 
                 int[] pixels = new int[size];
 
-                bitmap.getPixels(pixels, 0, w, 0, 0, w, h);
+                bitmap2.getPixels(pixels, 0, w, 0, 0, w, h);
 
                 /*
                 Log.d("rgbtest", ""+pixels.length);
@@ -165,21 +166,37 @@ public class rgbtest extends AppCompatActivity {
                     int g = (color >> 8) & 0xFF;
                     int b = (color) & 0xFF;
 
-                    Log.d("rgbtest", "r"+i + " " + r);
-                    Log.d("rgbtest", "g"+i + " " + g);
-                    Log.d("rgbtest", "b"+i + " " + b);
+                    color |= 0x00 << 16;
+                    color |= 0xFF << 8;
+                    color |= 0x00;
 
-                    Log.d("rgbtest", "pixels"+i + " " + color);
+                    int r2 = (color >> 16) & 0xFF;
+                    int g2 = (color >> 8) & 0xFF;
+                    int b2 = (color) & 0xFF;
+
+                    Log.d("rgbtest", "r2"+i + " " + r2);
+                    Log.d("rgbtest", "g2"+i + " " + g2);
+                    Log.d("rgbtest", "b2"+i + " " + b2);
+
+                    pixels[i] = color;
 
                 }
-                imgtest.setImageBitmap(bitmap);
+                bitmap2.setPixels(pixels, 0, w, 0, 0, w, h);
+
+                imgtest.setImageBitmap(bitmap2);
 
             }
         });
 
-
     }
 
-
+    public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
+        double ratio = (double) targetWidth / (double) source.getWidth();
+        int targetHeight = (int) (source.getHeight() * ratio);
+        Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+        if (result != source)
+            source.recycle();
+        return result;
+    }
 
 }
