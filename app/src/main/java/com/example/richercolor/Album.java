@@ -69,7 +69,8 @@ public class Album extends AppCompatActivity {
                     int R = Color.red(rgb);
                     int G = Color.green(rgb);
                     int B = Color.blue(rgb);
-                    Log.d("Album ", "X " + touchX + " Y " + touchY + " rgb " + rgb);
+                    Log.d("Album ", "album width " + albumImage.getWidth() + " album Height " + albumImage.getHeight());
+                    Log.d("Album ", "touch X " + touchX + "touch Y " + touchY + " rgb " + rgb);
                     Log.d("Album ", "R " + R + " G " + G + " B " + B);
 
                     // 좌표에 툴팁을 띄운다.
@@ -83,7 +84,10 @@ public class Album extends AppCompatActivity {
                             .setBackgroundColor(Color.rgb(100, 228, 44))
                             .setBalloonAnimation(BalloonAnimation.FADE)
                             .build();
-                    ballon.show(v, (int)touchX, (0 - (int)touchY));
+                    if (touchY > albumImage.getHeight() / 2)
+                        ballon.show(v, (int)touchX, ((int)touchY));
+                    else
+                        ballon.show(v, (int)touchX, ((int)touchY) - albumImage.getHeight());
                 }
 
                 return false;
