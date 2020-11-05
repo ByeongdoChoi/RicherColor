@@ -162,6 +162,14 @@ public class rgbtest extends AppCompatActivity {
                 // 이미지 크기 조정
                 Bitmap bitmap2 = resizeBitmap(512, bitmap);
 
+                int real_w = bitmap2.getWidth();
+                int real_h = bitmap2.getHeight();
+
+                int real_size = real_w * real_h;
+
+                int[] real_pixels = new int[real_size];
+                bitmap2.getPixels(real_pixels, 0, real_w, 0, 0, real_w, real_h);
+
                 /*int w = bitmap2.getWidth();
                 int h = bitmap2.getHeight();
 
@@ -206,8 +214,44 @@ public class rgbtest extends AppCompatActivity {
                 // Mat 객체를 Bitmap 객체로 바꿈
                 Utils.matToBitmap(change, bitmap2);
 
+                //imgtest.setImageBitmap(bitmap2);
+
+                int w = bitmap2.getWidth();
+                int h = bitmap2.getHeight();
+
+                int size = w*h;
+                int[] original_pixels = new int[size];
+                int[] changed_pixels = new int[size];
+                int[] black_xy = new int[size];
+                int black_cnt = 0;
+
+                bitmap2.getPixels(original_pixels, 0, w, 0, 0, w, h);
+
+                for(int i=0; i<size; i++)
+                {
+                    int color = original_pixels[i];
+
+                    int r = (color >> 16) & 0xFF;
+                    int g = (color >> 8) & 0xFF;
+                    int b = (color) & 0xFF;
+
+                    if(r==0x00 && g==0x00 && b==0x00) //검은색일때
+                    {
+                        changed_pixels[i] = real_pixels[i];
+                    }
+
+                    else //검은색이 아닐때
+                    {
+                        int change_color = color;
+                        change_color |= 0x00 << 16;
+                        change_color |= 0xFF << 8;
+                        change_color |= 0x00;
+                        changed_pixels[i] = change_color;
+                    }
+                }
+
+                bitmap2.setPixels(changed_pixels,0, w, 0, 0, w, h);
                 imgtest.setImageBitmap(bitmap2);
-                imgtest.
 
                 /*Mat input = new Mat();
                 Bitmap bmp32 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
