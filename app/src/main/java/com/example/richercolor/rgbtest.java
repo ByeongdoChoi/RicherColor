@@ -188,22 +188,26 @@ public class rgbtest extends AppCompatActivity {
                 // 빨간색 영역을 제외한 사진
                 Mat unChange = new Mat();
                 Core.bitwise_xor(hsv_original, change, unChange);
+                Mat copychange = new Mat();
 
                 // 여기서 오류
                 // 빨간색 영역을 다른 색으로 바꾼다.
+                /*
                 Mat result = new Mat();
-                Imgproc.cvtColor(change, change, Color.rgb(0, 255, 0));
+                Imgproc.cvtColor(change, change, 40);
 
                 // unchange와 change를 합쳐서 result에 저장
                 Core.bitwise_or(change, unChange, result);
+                */
 
                 // result 그림을 다시 rgb로 바꿈
-                Imgproc.cvtColor(result, result, Imgproc.COLOR_HSV2RGB);
+                Imgproc.cvtColor(change, change, 55);
 
                 // Mat 객체를 Bitmap 객체로 바꿈
-                Utils.matToBitmap(result, bitmap2);
+                Utils.matToBitmap(change, bitmap2);
 
                 imgtest.setImageBitmap(bitmap2);
+                imgtest.
 
                 /*Mat input = new Mat();
                 Bitmap bmp32 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
