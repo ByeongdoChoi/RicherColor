@@ -157,65 +157,118 @@ public class rgbtest extends AppCompatActivity {
 
                 imgtest.setImageResource(R.drawable.cow);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+                Bitmap bitmapa = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+                Bitmap bitmapb = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+
                 Bitmap bitmap2 = resizeBitmap(512, bitmap); // 이미지 크기 조정
+
+                Bitmap bitmapA = resizeBitmap(512, bitmapa); // 색A를 추출할 비트맵
+                Bitmap bitmapB = resizeBitmap(512, bitmapb); // 색B를 추출할 비트맵
 
                 int w = bitmap2.getWidth(); //원본의 w사이즈
                 int h = bitmap2.getHeight(); //원본의 h사이즈
                 int size = w * h; //원본 사이즈
 
                 int[] real_pixels = new int[size]; //원본 픽셀
-                int[] extract_pixels = new int[size]; //추출된 색상 픽셀
+                int[] extract_pixelsA = new int[size]; //추출된 색상 픽셀
+                int[] extract_pixelsB = new int[size]; //추출된 색상 픽셀
                 int[] changed_pixels = new int[size]; //최종적으로 바꿀 픽셀
 
                 bitmap2.getPixels(real_pixels, 0, w, 0, 0, w, h); //real_pixels에 원본 픽셀을 넣음
 
+                // bitmapA를 Mat 객체로 변환
+                Mat originalA = new Mat (bitmapA.getWidth(), bitmapA.getHeight(), CvType.CV_8UC3);
+                Utils.bitmapToMat(bitmapA, originalA);
 
-
-                // bitmap2를 Mat 객체로 변환
-                Mat original = new Mat (bitmap2.getWidth(), bitmap2.getHeight(), CvType.CV_8UC3);
-                Utils.bitmapToMat(bitmap2, original);
+                // bitmapB를 Mat 객체로 변환
+                Mat originalB = new Mat (bitmapB.getWidth(), bitmapB.getHeight(), CvType.CV_8UC3);
+                Utils.bitmapToMat(bitmapB, originalB);
 
                 // rgb를 hsv 변환
-                Mat hsv_original = new Mat();
-                Imgproc.cvtColor(original, hsv_original, Imgproc.COLOR_RGB2HSV);
+                Mat hsv_originalA = new Mat();
+                Imgproc.cvtColor(originalA, hsv_originalA, Imgproc.COLOR_RGB2HSV);
+
+                Mat hsv_originalB = new Mat();
+                Imgproc.cvtColor(originalB, hsv_originalB, Imgproc.COLOR_RGB2HSV);
 
                 // 빨간색 영역을 구하는 마스크 생성
                 Mat mask = new Mat();
-                Core.inRange(hsv_original, lower_red, upper_red, mask);
+                Core.inRange(hsv_originalA, lower_red, upper_red, mask);
+
+                // 초록색 영역을 구하는 마스크 생성
+                Mat mask2 = new Mat();
+                Core.inRange(hsv_originalB, lower_green, upper_green, mask2);
 
                 // 빨간색 영역만 구한 사진
-                Mat change = new Mat();
-                Core.bitwise_and(hsv_original, hsv_original, change, mask);
+                Mat changeA = new Mat();
+                Core.bitwise_and(hsv_originalA, hsv_originalA, changeA, mask);
+
+                // 초록색 영역만 구한 사진
+                Mat changeB = new Mat();
+                Core.bitwise_and(hsv_originalB, hsv_originalB, changeB, mask2);
 
                 // 빨간색 영역을 제외한 사진
-                Mat unChange = new Mat();
-                Core.bitwise_xor(hsv_original, change, unChange);
-                Mat copychange = new Mat();
+                Mat unChangeA = new Mat();
+                Core.bitwise_xor(hsv_originalA, changeA, unChangeA);
+
+                // 초록색 영역을 제외한 사진
+                Mat unChangeB = new Mat();
+                Core.bitwise_xor(hsv_originalB, changeB, unChangeB);
 
                 // result 그림을 다시 rgb로 바꿈
-                Imgproc.cvtColor(change, change, 55);
+                Imgproc.cvtColor(changeA, changeA, Imgproc.COLOR_HSV2RGB);
+                Imgproc.cvtColor(changeB, changeB, Imgproc.COLOR_HSV2RGB);
 
                 // Mat 객체를 Bitmap 객체로 바꿈
-                Utils.matToBitmap(change, bitmap2);
+                Utils.matToBitmap(changeA, bitmapA);
+                Utils.matToBitmap(changeB, bitmapB);
 
-                bitmap2.getPixels(extract_pixels, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
+                bitmapA.getPixels(extract_pixelsA, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
+                bitmapB.getPixels(extract_pixelsB, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
 
                 for(int i=0; i<size; i++)
                 {
-                    int color = extract_pixels[i];
+                    int colorA = extract_pixelsA[i];
 
-                    int r = (color >> 16) & 0xFF;
-                    int g = (color >> 8) & 0xFF;
-                    int b = (color) & 0xFF;
+                    int rA = (colorA >> 16) & 0xFF;
+                    int gA = (colorA >> 8) & 0xFF;
+                    int bA = (colorA) & 0xFF;
 
-                    if(r==0x00 && g==0x00 && b==0x00) //검정색일때
+                    if(rA==0x00 && gA==0x00 && bA==0x00) //검정색일때
                     {
                         changed_pixels[i] = real_pixels[i];
                     }
 
-                    else //검은색이 아닐때(추출한 색일때), 일단 이거는 추출색을 초록색으로 바꾼것
+                    else //검은색이 아닐때(추출한 색일때), 빨간색의 크기를 키움
                     {
-                        int change_color = color;
+                        int change_color = colorA;
+                        change_color |= 0xFF << 16;
+                        change_color |= 0x00 << 8;
+                        change_color |= 0x00;
+                        changed_pixels[i] = change_color;
+                    }
+                }
+
+                for(int i=0; i<size; i++)
+                {
+                    int colorB = extract_pixelsB[i];
+
+                    int rB = (colorB >> 16) & 0xFF;
+                    int gB = (colorB >> 8) & 0xFF;
+                    int bB = (colorB) & 0xFF;
+
+                    if(rB==0x00 && gB==0x00 && bB==0x00) //검정색일때
+                    {
+                        if(changed_pixels[i] != real_pixels[i]) //빨간색에서 바뀐것일때
+                            continue;
+
+                        else
+                            changed_pixels[i] = real_pixels[i];
+                    }
+
+                    else //검은색이 아닐때(추출한 색일때), 초록색의 크기를 키움
+                    {
+                        int change_color = colorB;
                         change_color |= 0x00 << 16;
                         change_color |= 0xFF << 8;
                         change_color |= 0x00;
