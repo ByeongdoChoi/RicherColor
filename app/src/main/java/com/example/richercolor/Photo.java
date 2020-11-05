@@ -93,6 +93,7 @@ public class Photo extends AppCompatActivity {
             bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             intent.putExtra("image", byteArray);
+            Log.d("Photo ", "변환 완료");
             startActivity(intent);
         }
     }
