@@ -62,7 +62,6 @@ public class rgbtest extends AppCompatActivity {
         button3 = findViewById(R.id.btn_color_change3);
         button4 = findViewById(R.id.btn_color_change4);
         /*
-
         seekBarred.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
             @Override
@@ -158,24 +157,19 @@ public class rgbtest extends AppCompatActivity {
 
                 imgtest.setImageResource(R.drawable.cow);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+                Bitmap bitmap2 = resizeBitmap(512, bitmap); // 이미지 크기 조정
 
-                // 이미지 크기 조정
-                Bitmap bitmap2 = resizeBitmap(512, bitmap);
+                int w = bitmap2.getWidth(); //원본의 w사이즈
+                int h = bitmap2.getHeight(); //원본의 h사이즈
+                int size = w * h; //원본 사이즈
 
-                int real_w = bitmap2.getWidth();
-                int real_h = bitmap2.getHeight();
+                int[] real_pixels = new int[size]; //원본 픽셀
+                int[] extract_pixels = new int[size]; //추출된 색상 픽셀
+                int[] changed_pixels = new int[size]; //최종적으로 바꿀 픽셀
 
-                int real_size = real_w * real_h;
+                bitmap2.getPixels(real_pixels, 0, w, 0, 0, w, h); //real_pixels에 원본 픽셀을 넣음
 
-                int[] real_pixels = new int[real_size];
-                bitmap2.getPixels(real_pixels, 0, real_w, 0, 0, real_w, real_h);
 
-                /*int w = bitmap2.getWidth();
-                int h = bitmap2.getHeight();
-
-                int size = w*h;
-                int[] pixels = new int[size];
-                bitmap2.getPixels(pixels, 0, w, 0, 0, w, h);*/
 
                 // bitmap2를 Mat 객체로 변환
                 Mat original = new Mat (bitmap2.getWidth(), bitmap2.getHeight(), CvType.CV_8UC3);
@@ -198,49 +192,28 @@ public class rgbtest extends AppCompatActivity {
                 Core.bitwise_xor(hsv_original, change, unChange);
                 Mat copychange = new Mat();
 
-                // 여기서 오류
-                // 빨간색 영역을 다른 색으로 바꾼다.
-                /*
-                Mat result = new Mat();
-                Imgproc.cvtColor(change, change, 40);
-
-                // unchange와 change를 합쳐서 result에 저장
-                Core.bitwise_or(change, unChange, result);
-                */
-
                 // result 그림을 다시 rgb로 바꿈
                 Imgproc.cvtColor(change, change, 55);
 
                 // Mat 객체를 Bitmap 객체로 바꿈
                 Utils.matToBitmap(change, bitmap2);
 
-                //imgtest.setImageBitmap(bitmap2);
-
-                int w = bitmap2.getWidth();
-                int h = bitmap2.getHeight();
-
-                int size = w*h;
-                int[] original_pixels = new int[size];
-                int[] changed_pixels = new int[size];
-                int[] black_xy = new int[size];
-                int black_cnt = 0;
-
-                bitmap2.getPixels(original_pixels, 0, w, 0, 0, w, h);
+                bitmap2.getPixels(extract_pixels, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
 
                 for(int i=0; i<size; i++)
                 {
-                    int color = original_pixels[i];
+                    int color = extract_pixels[i];
 
                     int r = (color >> 16) & 0xFF;
                     int g = (color >> 8) & 0xFF;
                     int b = (color) & 0xFF;
 
-                    if(r==0x00 && g==0x00 && b==0x00) //검은색일때
+                    if(r==0x00 && g==0x00 && b==0x00) //검정색일때
                     {
                         changed_pixels[i] = real_pixels[i];
                     }
 
-                    else //검은색이 아닐때
+                    else //검은색이 아닐때(추출한 색일때), 일단 이거는 추출색을 초록색으로 바꾼것
                     {
                         int change_color = color;
                         change_color |= 0x00 << 16;
@@ -252,48 +225,6 @@ public class rgbtest extends AppCompatActivity {
 
                 bitmap2.setPixels(changed_pixels,0, w, 0, 0, w, h);
                 imgtest.setImageBitmap(bitmap2);
-
-                /*Mat input = new Mat();
-                Bitmap bmp32 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
-                Utils.bitmapToMat(bmp32, input);
-
-                Mat bgrMat = new Mat();
-
-                Imgproc.cvtColor(input, bgrMat, Imgproc.COLOR_RGB2HSV);
-
-                Mat hsvMat = new Mat();
-
-                Imgproc.cvtColor(bgrMat, hsvMat, Imgproc.COLOR_BGR2HSV);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                Bitmap image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
-                Utils.matToBitmap(hsvMat, image);*/
-
-                /*
-                Log.d("rgbtest", ""+pixels.length);
-                for (int i=0; i<pixels.length; i++) {
-                    Log.d("rgbtest", "pixels"+i + " " + pixels[i]);
-                }*/
-
-                /*for(int i=0; i<size; i++)
-                {
-                    int color = pixels[i];
-
-                    int r = (color >> 16) & 0xFF;
-                    int g = (color >> 8) & 0xFF;
-                    int b = (color) & 0xFF;
-
-                    Log.d("rgbtest", "r"+i + " " + r);
-                    Log.d("rgbtest", "g"+i + " " + g);
-                    Log.d("rgbtest", "b"+i + " " + b);
-
-                    Log.d("rgbtest", "pixels"+i + " " + color);
-
-                }*/
-
 
             }
         });
