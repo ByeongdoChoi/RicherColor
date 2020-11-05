@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class Photo extends AppCompatActivity {
@@ -81,11 +82,18 @@ public class Photo extends AppCompatActivity {
 
             // 이미지 크기 조정
             Bitmap bitmap2 = resizeBitmap(1024, bitmap);
-
-
             image1.setImageBitmap(bitmap2);
 
+            Bitmap bitmap3 = rotateBitmap(bitmap2, 90);
+
             galleryAddPic();
+
+            Intent intent = new Intent(getApplicationContext(), Album.class);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            intent.putExtra("image", byteArray);
+            startActivity(intent);
         }
     }
 
@@ -137,7 +145,7 @@ public class Photo extends AppCompatActivity {
             matrix.postRotate(degree);
 
             Bitmap bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-            bitmap.recycle();
+            //bitmap.recycle();
 
             return bitmap2;
         } catch (Exception e) {

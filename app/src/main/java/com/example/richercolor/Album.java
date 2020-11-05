@@ -41,6 +41,7 @@ public class Album extends AppCompatActivity {
     private SeekBar seekBarBlue;
 
     private LinearLayout container;
+    boolean setPicture = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,42 +55,33 @@ public class Album extends AppCompatActivity {
         seekBarBlue = findViewById(R.id.seekBarBlue);
 
         setSeekBarEvent();
-        getImage();
 
-        // 이미지뷰 터치했을때
-        imageView.setOnTouchListener(new View.OnTouchListener() {
+        // MainActivity에서 이미지 건네 받기
+        byte[] byteArray = getIntent().getByteArrayExtra("image");
+
+        Bitmap image = null;
+        if (byteArray != null) {
+            image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            setPicture = true;
+
+            imageView.setImageBitmap(image);
+            setImageViewTouchListener(imageView);
+        }
+
+
+        Log.d("Album", "setPicture " + setPicture);
+
+        if (setPicture) {
+            setImageViewTouchListener(imageView);
+        }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    touchX = event.getX();  // 좌표를 받아온다
-                    touchY = event.getY();
-
-                    if (touchX >= albumImage.getWidth() || touchY >= albumImage.getHeight()) return false;
-
-                    // 좌표에 RGB 값을 추출한다.
-                    int rgb = albumImage.getPixel((int)touchX, (int)touchY);
-                    int R = Color.red(rgb);
-                    int G = Color.green(rgb);
-                    int B = Color.blue(rgb);
-                    Log.d("Album ", "album width " + albumImage.getWidth() + " album Height " + albumImage.getHeight());
-                    Log.d("Album ", "touch X " + touchX + "touch Y " + touchY + " rgb " + rgb);
-                    Log.d("Album ", "R " + R + " G " + G + " B " + B);
-
-                    // 좌표에 툴팁을 띄운다.
-                    String color = "(" + R + "," + G + "," + B +")";
-                    Balloon ballon = new Balloon.Builder(Album.this)
-                            .setArrowVisible(false)
-                            .setWidthRatio(0.25f)
-                            .setHeight(65)
-                            .setText("rgb\n"+color)
-                            .setAlpha(0.8f)
-                            .setBackgroundColor(Color.rgb(100, 228, 44))
-                            .setBalloonAnimation(BalloonAnimation.FADE)
-                            .build();
-                    ballon.show(v, (int)touchX, (int)touchY);
+            public void onClick(View v) {
+                if (!setPicture) {
+                    getImage();
+                    setPicture = true;
                 }
-
-                return false;
             }
         });
     }
@@ -165,6 +157,45 @@ public class Album extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    private void setImageViewTouchListener(ImageView v) {
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    touchX = event.getX();  // 좌표를 받아온다
+                    touchY = event.getY();
+
+                    if (touchX >= albumImage.getWidth() || touchY >= albumImage.getHeight()) return false;
+
+                    // 좌표에 RGB 값을 추출한다.
+                    int rgb = albumImage.getPixel((int)touchX, (int)touchY);
+                    int R = Color.red(rgb);
+                    int G = Color.green(rgb);
+                    int B = Color.blue(rgb);
+                    Log.d("Album ", "album width " + albumImage.getWidth() + " album Height " + albumImage.getHeight());
+                    Log.d("Album ", "touch X " + touchX + "touch Y " + touchY + " rgb " + rgb);
+                    Log.d("Album ", "R " + R + " G " + G + " B " + B);
+
+                    // 좌표에 툴팁을 띄운다.
+                    String color = "(" + R + "," + G + "," + B +")";
+                    Balloon ballon = new Balloon.Builder(Album.this)
+                            .setArrowVisible(false)
+                            .setWidthRatio(0.25f)
+                            .setHeight(65)
+                            .setText("rgb\n"+color)
+                            .setAlpha(0.8f)
+                            .setBackgroundColor(Color.rgb(100, 228, 44))
+                            .setBalloonAnimation(BalloonAnimation.FADE)
+                            .build();
+                    ballon.show(v, (int)touchX, (int)touchY);
+                }
+
+                return false;
+            }
+        });
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -203,6 +234,9 @@ public class Album extends AppCompatActivity {
 
                     albumImage = bitmap3;
                     imageView.setImageBitmap(albumImage);
+
+                    // 이미지뷰 터치했을때
+                    setImageViewTouchListener(imageView);
                 }
 
         } catch (Exception e) {
@@ -251,7 +285,7 @@ public class Album extends AppCompatActivity {
             matrix.postRotate(degree);
 
             Bitmap bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-            bitmap.recycle();
+            //bitmap.recycle();
 
             return bitmap2;
         } catch (Exception e) {

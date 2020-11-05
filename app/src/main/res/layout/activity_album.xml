@@ -43,46 +43,55 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="버튼1" />
+                android:text="적록색맹" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="버튼2" />
+                android:text="황청색맹" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="버튼3" />
+                android:text="원" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="버튼4" />
+
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <SeekBar
-                android:id="@+id/seekBarRed"
-                android:layout_width="match_parent"
-                android:layout_height="37dp"
-                android:max="255"/>
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:orientation="horizontal">
 
-            <SeekBar
-                android:id="@+id/seekBarGreen"
-                android:layout_width="match_parent"
-                android:layout_height="37dp"
-                android:max="255"/>
+            <Button
+                android:id="@+id/button_minus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:textSize="30dp"
+                android:text="-"
+                />
 
-            <SeekBar
-                android:id="@+id/seekBarBlue"
-                android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:max="255"/>
+            <TextView
+                android:id="@+id/button_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:text="1"
+                />
+
+            <Button
+                android:id="@+id/button_plus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:textSize="30dp"
+                android:text="+"
+                />
 
         </LinearLayout>
     </LinearLayout>
