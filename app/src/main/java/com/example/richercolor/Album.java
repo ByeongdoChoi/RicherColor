@@ -47,24 +47,7 @@ public class Album extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         container = findViewById(R.id.album_container);
 
-        // MainActivity에서 이미지 건네 받기
-        byte[] byteArray = getIntent().getByteArrayExtra("image");
-
-        Bitmap image = null;
-        if (byteArray != null) {
-            image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            setPicture = true;
-
-            imageView.setImageBitmap(image);
-            setImageViewTouchListener(imageView);
-        }
-
-
         Log.d("Album", "setPicture " + setPicture);
-
-        if (setPicture) {
-            setImageViewTouchListener(imageView);
-        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +96,7 @@ public class Album extends AppCompatActivity {
                             .setBackgroundColor(Color.rgb(100, 228, 44))
                             .setBalloonAnimation(BalloonAnimation.FADE)
                             .build();
-                    ballon.show(v, (int)touchX, (int)touchY);
+                    ballon.show(v, (int)touchX, (int)touchY - albumImage.getHeight());
                 }
 
                 return false;

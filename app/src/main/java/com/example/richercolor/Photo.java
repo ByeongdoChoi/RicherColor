@@ -88,13 +88,13 @@ public class Photo extends AppCompatActivity {
 
             galleryAddPic();
 
-            Intent intent = new Intent(getApplicationContext(), Album.class);
+            /*Intent intent = new Intent(getApplicationContext(), Album.class);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             intent.putExtra("image", byteArray);
             Log.d("Photo ", "변환 완료");
-            startActivity(intent);
+            startActivity(intent);*/
         }
     }
 
