@@ -61,95 +61,7 @@ public class rgbtest extends AppCompatActivity {
         button2 = findViewById(R.id.btn_color_change2);
         button3 = findViewById(R.id.btn_color_change3);
         button4 = findViewById(R.id.btn_color_change4);
-        /*
-        seekBarred.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int red = seekBarred.getProgress();
-                int green = seekBargreen.getProgress();
-                int blue = seekBarblue.getProgress();
-                imgtest.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        seekBargreen.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int red = seekBarred.getProgress();
-                int green = seekBargreen.getProgress();
-                int blue = seekBarblue.getProgress();
-                imgtest.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        seekBarblue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int red = seekBarred.getProgress();
-                int green = seekBargreen.getProgress();
-                int blue = seekBarblue.getProgress();
-                imgtest.setColorFilter(Color.rgb(red,green,blue),PorterDuff.Mode.LIGHTEN);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorMatrix result = new ColorMatrix(ColorMatrices.SWAP_R_G);
-                imgtest.setColorFilter(new ColorMatrixColorFilter(result));
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorMatrix result = new ColorMatrix(ColorMatrices.SWAP_R_B);
-                imgtest.setColorFilter(new ColorMatrixColorFilter(result));
-            }
-        });
-
-
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorMatrix result = new ColorMatrix(ColorMatrices.SWAP_G_B);
-                imgtest.setColorFilter(new ColorMatrixColorFilter(result));
-            }
-        });*/
 
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,10 +72,10 @@ public class rgbtest extends AppCompatActivity {
                 Bitmap bitmapa = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
                 Bitmap bitmapb = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
 
-                Bitmap bitmap2 = resizeBitmap(512, bitmap); // 이미지 크기 조정
+                Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
 
-                Bitmap bitmapA = resizeBitmap(512, bitmapa); // 색A를 추출할 비트맵
-                Bitmap bitmapB = resizeBitmap(512, bitmapb); // 색B를 추출할 비트맵
+                Bitmap bitmapA = resizeBitmap(1024, bitmapa); // 색A를 추출할 비트맵
+                Bitmap bitmapB = resizeBitmap(1024, bitmapb); // 색B를 추출할 비트맵
 
                 int w = bitmap2.getWidth(); //원본의 w사이즈
                 int h = bitmap2.getHeight(); //원본의 h사이즈

@@ -40,19 +40,22 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_redgreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="적록색맹" />
 
             <Button
+                android:id="@+id/btn_yellowblue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="황청색맹" />
 
             <Button
+                android:id="@+id/btn_original"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="원" />
+                android:text="원본" />
 
 
         </LinearLayout>
