@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -49,6 +50,8 @@ public class Album extends AppCompatActivity {
 
     private LinearLayout container;
     boolean setPicture = false;
+
+    Bitmap originalPicture; // 원본 사진
 
     /*조광식*/
     int clicked_button_redgreen = 0;
@@ -104,15 +107,13 @@ public class Album extends AppCompatActivity {
 
                 if(clicked_button_redgreen == 1)
                 {
-                    show_image.setImageResource(R.drawable.cow);
-                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
-                    Bitmap bitmapa = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
-                    Bitmap bitmapb = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+                    //show_image.setImageResource(R.drawable.cow);
+                    BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                    Bitmap bitmap2 = drawable.getBitmap();
+                    Bitmap bitmapA = drawable.getBitmap();
+                    Bitmap bitmapB = drawable.getBitmap();
 
-                    Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
-
-                    Bitmap bitmapA = resizeBitmap(1024, bitmapa); // 색A를 추출할 비트맵
-                    Bitmap bitmapB = resizeBitmap(1024, bitmapb); // 색B를 추출할 비트맵
+                    // Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
 
                     int w = bitmap2.getWidth(); //원본의 w사이즈
                     int h = bitmap2.getHeight(); //원본의 h사이즈
@@ -263,10 +264,10 @@ public class Album extends AppCompatActivity {
                 clicked_button_redgreen = 0;
                 clicked_button_original = 1;
 
-                show_image.setImageResource(R.drawable.cow);
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
-                Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
-                show_image.setImageBitmap(bitmap2);
+                imageView.setImageBitmap(originalPicture);
+                //Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
+                //Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
+                //show_image.setImageBitmap(bitmap2);
 
             }
         });
@@ -377,6 +378,7 @@ public class Album extends AppCompatActivity {
                     Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
 
                     albumImage = bitmap3;
+                    originalPicture = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
                     imageView.setImageBitmap(albumImage);
 
                     // 이미지뷰 터치했을때
