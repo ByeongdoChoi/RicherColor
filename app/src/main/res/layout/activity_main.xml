@@ -7,62 +7,161 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:background="#9cb4f0"
+        android:layout_weight="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="설정" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/camera" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textSize="30dp"
-            android:text="리처 컬러"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:text="사진촬영"
+                android:fontFamily="monospace"
+                android:textSize="30dp"
+                android:textColor="#ffffff" />
 
-        <Button
-            android:id="@+id/color_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="색맹 테스트" />
-    </RelativeLayout>
+            <Button
+                android:id="@+id/take_photo_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/go"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center">
+        android:layout_height="0dp"
+        android:background="#f3bb71"
+        android:layout_weight="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/take_photo_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사진 촬영" />
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/getpicture" />
 
-        <Button
-            android:id="@+id/get_photo_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="앨범 선택" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:text="앨범선택"
+                android:fontFamily="monospace"
+                android:textSize="30dp"
+                android:textColor="#ffffff" />
 
-        <Button
-            android:id="@+id/view_art"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="명화 감상" />
+            <Button
+                android:id="@+id/get_photo_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/go"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
 
-        <Button
-            android:id="@+id/test_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="사진 테스트" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#ff84a7"
+        android:layout_weight="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/masterpiece" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:text="명화감상"
+                android:fontFamily="monospace"
+                android:textSize="30dp"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/view_art"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/go"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#7beced"
+        android:layout_weight="1">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/picture_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/test" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/picture_test"
+                android:layout_marginLeft="10dp"
+                android:text="색맹 테스트"
+                android:fontFamily="monospace"
+                android:textSize="30dp"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/color_test"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/go"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
 </LinearLayout>

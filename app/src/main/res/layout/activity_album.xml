@@ -21,10 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:background="#dddddd"
-            android:src="@drawable/ic_launcher_foreground" />
-
-
+            android:src="@drawable/select" />
     </LinearLayout>
 
     <LinearLayout
