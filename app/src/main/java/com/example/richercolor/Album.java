@@ -848,7 +848,90 @@ public class Album extends AppCompatActivity {
 
                     if (clicked_button_yellowblue == 1) {
 
+                        /*******************************************************/
+                        for(int i=0; i<size; i++)
+                        {
+                            int colorD = extract_pixelsD[i];
+
+                            int aD = (colorD >> 24) & 0xFF;
+                            int rD = (colorD >> 16) & 0xFF;
+                            int gD = (colorD >> 8) & 0xFF;
+                            int bD = (colorD) & 0xFF;
+
+                            if(rD==0x00 && gD==0x00 && bD==0x00) //검정색일때
+                            {
+                                changed_pixels[i] = real_pixels[i];
+                            }
+
+                            else //검은색이 아닐때(추출한 색일때), 노란색(빨간+초록)의 크기를 키움
+                            {
+
+                                int change_red = rD;
+                                int change_green = gD;
+
+                                change_red = change_red + rangeA[i]*button_cnt;
+                                change_green = change_green + rangeB[i]*button_cnt;
+
+                                if(change_red >= 0xFF)
+                                    change_red = 0xFF;
+
+                                if(change_green >= 0xFF)
+                                    change_green = 0xFF;
+
+                                int change_color = 0;
+
+                                change_color |= aD << 24;
+                                change_color |= change_red << 16;
+                                change_color |= change_green << 8;
+                                change_color |= bD;
+
+                                changed_pixels[i] = change_color;
+                            }
+                        }
+
+                        for(int i=0; i<size; i++)
+                        {
+                            int colorC = extract_pixelsC[i];
+
+                            int aC = (colorC >> 24) & 0xFF;
+                            int rC = (colorC >> 16) & 0xFF;
+                            int gC = (colorC >> 8) & 0xFF;
+                            int bC = (colorC) & 0xFF;
+
+                            if(rC==0x00 && gC==0x00 && bC==0x00) //검정색일때
+                            {
+                                if(changed_pixels[i] != real_pixels[i]) //노란색에서 바뀐것일때
+                                    continue;
+
+                                else
+                                    changed_pixels[i] = real_pixels[i];
+                            }
+
+                            else //검은색이 아닐때(추출한 색일때), 파란색의 크기를 키움
+                            {
+                                int change_blue = gC;
+
+                                change_blue = change_blue + (rangeC[i]*button_cnt);
+
+                                if(change_blue >= 0xFF)
+                                    change_blue = 0xFF;
+
+                                int change_color = 0;
+
+                                change_color |= aC << 24;
+                                change_color |= rC << 16;
+                                change_color |= gC << 8;
+                                change_color |= change_blue;
+
+                                changed_pixels[i] = change_color;
+                            }
+                        }
+                        /******************************************/
+                        bitmap2.setPixels(changed_pixels,0, w, 0, 0, w, h);
+                        show_image.setImageBitmap(bitmap2);
+
                     }
+
                 }
 
 
