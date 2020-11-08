@@ -68,29 +68,56 @@ public class Album extends AppCompatActivity {
     Scalar upper_green = new Scalar(70, 255, 255);
     Scalar lower_red = new Scalar(-10, 100, 100);
     Scalar upper_red = new Scalar(10, 255, 255);
+    Scalar lower_yellow = new Scalar(20, 20, 100);
+    Scalar upper_yellow = new Scalar(32, 255, 255);
 
     int[] real_pixels;
+
     int[] extract_pixelsA;
     int[] extract_pixelsB;
+    int[] extract_pixelsC;
+    int[] extract_pixelsD;
+
     int[] changed_pixels;
+
     int[] rangeA;
     int[] rangeB;
+    int[] rangeC;
+    int[] rangeD;
 
     Mat originalA;
     Mat originalB;
+    Mat originalC;
+    Mat originalD;
+
     Mat hsv_originalA;
     Mat hsv_originalB;
+    Mat hsv_originalC;
+    Mat hsv_originalD;
+
     Mat mask;
     Mat mask2;
+    Mat mask3;
+    Mat mask4;
+
     Mat changeA;
     Mat changeB;
+    Mat changeC;
+    Mat changeD;
+
     Mat unChangeA;
     Mat unChangeB;
+    Mat unChangeC;
+    Mat unChangeD;
 
     BitmapDrawable drawable;
     Bitmap bitmap2;
+
     Bitmap bitmapA;
     Bitmap bitmapB;
+    Bitmap bitmapC;
+    Bitmap bitmapD;
+
     int w,h,size;
     /*조광식*/
 
@@ -292,16 +319,6 @@ public class Album extends AppCompatActivity {
                     show_image.setImageBitmap(bitmap2);
                 }
 
-                else if(clicked_button_yellowblue == 1)
-                {
-
-                }
-
-                else
-                {
-
-                }
-
             }
         });
 
@@ -312,6 +329,229 @@ public class Album extends AppCompatActivity {
                 clicked_button_yellowblue = 1;
                 clicked_button_redgreen = 0;
                 clicked_button_original = 0;
+
+                button_cnt = 1;
+
+                if(clicked_button_yellowblue == 1)
+                {
+                    //show_image.setImageResource(R.drawable.cow);
+                    drawable = (BitmapDrawable) imageView.getDrawable();
+                    bitmap2 = drawable.getBitmap();
+                    bitmapA = drawable.getBitmap();
+                    bitmapB = drawable.getBitmap();
+                    bitmapC = drawable.getBitmap();
+                    bitmapD = drawable.getBitmap();
+
+                    // Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
+
+                    w = bitmap2.getWidth(); //원본의 w사이즈
+                    h = bitmap2.getHeight(); //원본의 h사이즈
+                    size = w * h; //원본 사이즈
+
+                    real_pixels = new int[size]; //원본 픽셀
+                    extract_pixelsA = new int[size]; //추출된 색상 픽셀
+                    extract_pixelsB = new int[size]; //추출된 색상 픽셀
+                    extract_pixelsC = new int[size];
+                    extract_pixelsD = new int[size];
+
+                    changed_pixels = new int[size]; //최종적으로 바꿀 픽셀
+
+                    rangeA = new int[size]; //A범위
+                    rangeB = new int[size];//B범위
+                    rangeC = new int[size]; //C범위
+                    rangeD = new int[size]; //D범위
+
+                    bitmap2.getPixels(real_pixels, 0, w, 0, 0, w, h); //real_pixels에 원본 픽셀을 넣음
+
+                    // bitmapA를 Mat 객체로 변환
+                    originalA = new Mat (bitmapA.getWidth(), bitmapA.getHeight(), CvType.CV_8UC3);
+                    Utils.bitmapToMat(bitmapA, originalA);
+
+                    // bitmapB를 Mat 객체로 변환
+                    originalB = new Mat (bitmapB.getWidth(), bitmapB.getHeight(), CvType.CV_8UC3);
+                    Utils.bitmapToMat(bitmapB, originalB);
+
+                    // bitmapC를 Mat 객체로 변환
+                    originalC = new Mat (bitmapC.getWidth(), bitmapC.getHeight(), CvType.CV_8UC3);
+                    Utils.bitmapToMat(bitmapC, originalC);
+
+                    // bitmapD를 Mat 객체로 변환
+                    originalD = new Mat (bitmapD.getWidth(), bitmapD.getHeight(), CvType.CV_8UC3);
+                    Utils.bitmapToMat(bitmapD, originalD);
+
+                    // rgb를 hsv 변환
+                    hsv_originalA = new Mat();
+                    Imgproc.cvtColor(originalA, hsv_originalA, Imgproc.COLOR_RGB2HSV);
+
+                    hsv_originalB = new Mat();
+                    Imgproc.cvtColor(originalB, hsv_originalB, Imgproc.COLOR_RGB2HSV);
+
+                    hsv_originalC = new Mat();
+                    Imgproc.cvtColor(originalC, hsv_originalC, Imgproc.COLOR_RGB2HSV);
+
+                    hsv_originalD = new Mat();
+                    Imgproc.cvtColor(originalD, hsv_originalD, Imgproc.COLOR_RGB2HSV);
+
+                    //참고: 노란색은 빨간+녹색
+
+                    // 빨간색 영역을 구하는 마스크 생성
+                    mask = new Mat();
+                    Core.inRange(hsv_originalA, lower_red, upper_red, mask);
+
+                    // 초록색 영역을 구하는 마스크 생성
+                    mask2 = new Mat();
+                    Core.inRange(hsv_originalB, lower_green, upper_green, mask2);
+
+                    // 파란색 영역을 구하는 마스크 생성
+                    mask3 = new Mat();
+                    Core.inRange(hsv_originalC, lower_blue, upper_blue, mask3);
+
+                    // 노란색 영역을 구하는 마스크 생성
+                    mask4 = new Mat();
+                    Core.inRange(hsv_originalD, lower_yellow, upper_yellow, mask4);
+
+                    // 빨간색 영역만 구한 사진
+                    changeA = new Mat();
+                    Core.bitwise_and(hsv_originalA, hsv_originalA, changeA, mask);
+
+                    // 초록색 영역만 구한 사진
+                    changeB = new Mat();
+                    Core.bitwise_and(hsv_originalB, hsv_originalB, changeB, mask2);
+
+                    // 파란색 영역만 구한 사진
+                    changeC = new Mat();
+                    Core.bitwise_and(hsv_originalC, hsv_originalC, changeC, mask3);
+
+                    // 노란색 영역만 구한 사진
+                    changeD = new Mat();
+                    Core.bitwise_and(hsv_originalD, hsv_originalD, changeD, mask4);
+
+                    // 빨간색 영역을 제외한 사진
+                    unChangeA = new Mat();
+                    Core.bitwise_xor(hsv_originalA, changeA, unChangeA);
+
+                    // 초록색 영역을 제외한 사진
+                    unChangeB = new Mat();
+                    Core.bitwise_xor(hsv_originalB, changeB, unChangeB);
+
+                    // 파란색 영역을 제외한 사진
+                    unChangeC = new Mat();
+                    Core.bitwise_xor(hsv_originalC, changeC, unChangeC);
+
+                    // 노란색 영역을 제외한 사진
+                    unChangeD = new Mat();
+                    Core.bitwise_xor(hsv_originalD, changeD, unChangeD);
+
+                    // result 그림을 다시 rgb로 바꿈
+                    Imgproc.cvtColor(changeA, changeA, Imgproc.COLOR_HSV2RGB);
+                    Imgproc.cvtColor(changeB, changeB, Imgproc.COLOR_HSV2RGB);
+                    Imgproc.cvtColor(changeC, changeC, Imgproc.COLOR_HSV2RGB);
+                    Imgproc.cvtColor(changeD, changeD, Imgproc.COLOR_HSV2RGB);
+
+                    // Mat 객체를 Bitmap 객체로 바꿈
+                    Utils.matToBitmap(changeA, bitmapA);
+                    Utils.matToBitmap(changeB, bitmapB);
+                    Utils.matToBitmap(changeC, bitmapC);
+                    Utils.matToBitmap(changeD, bitmapD);
+
+                    bitmapA.getPixels(extract_pixelsA, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
+                    bitmapB.getPixels(extract_pixelsB, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
+                    bitmapC.getPixels(extract_pixelsC, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
+                    bitmapD.getPixels(extract_pixelsD, 0, w, 0, 0, w, h); //extract_pixels에는 추출된 색상이 저장, 추출되지 않은 색상은 검정색으로
+
+                    for(int i=0; i<size; i++)
+                    {
+                        int colorD = extract_pixelsD[i];
+
+                        int aD = (colorD >> 24) & 0xFF;
+                        int rD = (colorD >> 16) & 0xFF;
+                        int gD = (colorD >> 8) & 0xFF;
+                        int bD = (colorD) & 0xFF;
+
+                        if(rD==0x00 && gD==0x00 && bD==0x00) //검정색일때
+                        {
+                            changed_pixels[i] = real_pixels[i];
+                        }
+
+                        //노란색은 빨간+녹색
+                        else //검은색이 아닐때(추출한 색일때), 노란색의 크기를 키움
+                        {
+                            //change_color |= 255 << 16;
+
+                            int change_red = rD;
+                            int change_green = gD;
+
+                            int change_red_plus_range = 255-change_red;
+                            int change_green_plus_range = 255-change_green;
+
+                            rangeA[i] = (change_red_plus_range/3);
+                            rangeB[i] = (change_green_plus_range/3);
+
+                            change_red = change_red + (rangeA[i]*button_cnt);
+                            change_green = change_green + (rangeB[i]*button_cnt);
+
+                            if(change_red >= 255)
+                                change_red = 255;
+
+                            if(change_green >= 255)
+                                change_green = 255;
+
+                            int change_color = 0;
+                            change_color |= aD << 24;
+                            change_color |= change_red << 16;
+                            change_color |= change_green << 8;
+                            change_color |= bD;
+
+                            changed_pixels[i] = change_color;
+                        }
+                    }
+
+                    //파란색 바꾸기
+                    for(int i=0; i<size; i++)
+                    {
+                        int colorC = extract_pixelsC[i];
+
+                        int aC = (colorC >> 24) & 0xFF;
+                        int rC = (colorC >> 16) & 0xFF;
+                        int gC = (colorC >> 8) & 0xFF;
+                        int bC = (colorC) & 0xFF;
+
+                        if(rC==0x00 && gC==0x00 && bC==0x00) //검정색일때
+                        {
+                            if(changed_pixels[i] != real_pixels[i]) //노란색에서 바뀐것일때
+                                continue;
+
+                            else
+                                changed_pixels[i] = real_pixels[i];
+                        }
+
+                        else //검은색이 아닐때(추출한 색일때), 파란색의 크기를 키움
+                        {
+                            int change_blue = gC;
+
+                            int change_blue_plus_range = 255 - change_blue;
+
+                            rangeC[i] = (change_blue_plus_range/3);
+
+                            change_blue = change_blue + (rangeC[i]*button_cnt);
+
+                            if(change_blue >= 255)
+                                change_blue = 255;
+
+                            int change_color = 0;
+
+                            change_color |= aC << 24;
+                            change_color |= rC << 16;
+                            change_color |= gC << 8;
+                            change_color |= change_blue;
+
+                            changed_pixels[i] = change_color;
+                        }
+                    }
+
+                    bitmap2.setPixels(changed_pixels,0, w, 0, 0, w, h);
+                    show_image.setImageBitmap(bitmap2);
+                }
 
 
 
@@ -426,6 +666,88 @@ public class Album extends AppCompatActivity {
                     }
 
                     if (clicked_button_yellowblue == 1) {
+
+                        /*******************************************************/
+                        for(int i=0; i<size; i++)
+                        {
+                            int colorD = extract_pixelsD[i];
+
+                            int aD = (colorD >> 24) & 0xFF;
+                            int rD = (colorD >> 16) & 0xFF;
+                            int gD = (colorD >> 8) & 0xFF;
+                            int bD = (colorD) & 0xFF;
+
+                            if(rD==0x00 && gD==0x00 && bD==0x00) //검정색일때
+                            {
+                                changed_pixels[i] = real_pixels[i];
+                            }
+
+                            else //검은색이 아닐때(추출한 색일때), 노란색(빨간+초록)의 크기를 키움
+                            {
+
+                                int change_red = rD;
+                                int change_green = gD;
+
+                                change_red = change_red + rangeA[i]*button_cnt;
+                                change_green = change_green + rangeB[i]*button_cnt;
+
+                                if(change_red >= 0xFF)
+                                    change_red = 0xFF;
+
+                                if(change_green >= 0xFF)
+                                    change_green = 0xFF;
+
+                                int change_color = 0;
+
+                                change_color |= aD << 24;
+                                change_color |= change_red << 16;
+                                change_color |= change_green << 8;
+                                change_color |= bD;
+
+                                changed_pixels[i] = change_color;
+                            }
+                        }
+
+                        for(int i=0; i<size; i++)
+                        {
+                            int colorC = extract_pixelsC[i];
+
+                            int aC = (colorC >> 24) & 0xFF;
+                            int rC = (colorC >> 16) & 0xFF;
+                            int gC = (colorC >> 8) & 0xFF;
+                            int bC = (colorC) & 0xFF;
+
+                            if(rC==0x00 && gC==0x00 && bC==0x00) //검정색일때
+                            {
+                                if(changed_pixels[i] != real_pixels[i]) //노란색에서 바뀐것일때
+                                    continue;
+
+                                else
+                                    changed_pixels[i] = real_pixels[i];
+                            }
+
+                            else //검은색이 아닐때(추출한 색일때), 파란색의 크기를 키움
+                            {
+                                int change_blue = gC;
+
+                                change_blue = change_blue + (rangeC[i]*button_cnt);
+
+                                if(change_blue >= 0xFF)
+                                    change_blue = 0xFF;
+
+                                int change_color = 0;
+
+                                change_color |= aC << 24;
+                                change_color |= rC << 16;
+                                change_color |= gC << 8;
+                                change_color |= change_blue;
+
+                                changed_pixels[i] = change_color;
+                            }
+                        }
+                        /******************************************/
+                        bitmap2.setPixels(changed_pixels,0, w, 0, 0, w, h);
+                        show_image.setImageBitmap(bitmap2);
 
                     }
                 }
