@@ -1,5 +1,6 @@
 package com.example.richercolor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,10 +12,13 @@ import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+
+import com.xw.repo.BubbleSeekBar;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+
     Button takePhotoBtn;
     Button getPhotoBtn;
     Button viewArtBtn;
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         getPhotoBtn = findViewById(R.id.get_photo_btn);
         viewArtBtn = findViewById(R.id.view_art);
         testBtn = findViewById(R.id.color_test);
+
 
         takePhotoBtn.setOnClickListener(new View.OnClickListener() {
             @Override

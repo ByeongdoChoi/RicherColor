@@ -1,5 +1,6 @@
 package com.example.richercolor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
@@ -19,15 +20,18 @@ import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.skydoves.balloon.Balloon;
 import com.skydoves.balloon.BalloonAnimation;
+import com.xw.repo.BubbleSeekBar;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -62,11 +66,11 @@ public class Album extends AppCompatActivity {
     int button_cnt = 0;
     ImageView show_image;
 
-    Scalar lower_blue = new Scalar(110, 100, 100);
+    Scalar lower_blue = new Scalar(110, 50, 50);
     Scalar upper_blue = new Scalar(130, 255, 255);
-    Scalar lower_green = new Scalar(50, 100, 100);
+    Scalar lower_green = new Scalar(50, 50, 50);
     Scalar upper_green = new Scalar(70, 255, 255);
-    Scalar lower_red = new Scalar(-10, 100, 100);
+    Scalar lower_red = new Scalar(-10, 50, 50);
     Scalar upper_red = new Scalar(10, 255, 255);
     Scalar lower_yellow = new Scalar(20, 20, 100);
     Scalar upper_yellow = new Scalar(32, 255, 255);
@@ -117,6 +121,7 @@ public class Album extends AppCompatActivity {
     Bitmap bitmapB;
     Bitmap bitmapC;
     Bitmap bitmapD;
+    BubbleSeekBar mBubbleSeekBar;
 
     int w,h,size;
     /*조광식*/
@@ -138,6 +143,41 @@ public class Album extends AppCompatActivity {
                     getImage();
                     setPicture = true;
                 }
+            }
+        });
+
+        mBubbleSeekBar = findViewById(R.id.seekBar);
+
+        mBubbleSeekBar.setCustomSectionTextArray(new BubbleSeekBar.CustomSectionTextArray() {
+            @NonNull
+            @Override
+            public SparseArray<String> onCustomize(int sectionCount, @NonNull SparseArray<String> array) {
+                array.clear();
+                array.put(0, "+3");
+                array.put(1, "+2");
+                array.put(2, "+1");
+                array.put(3, "원본");
+                array.put(4, "+1");
+                array.put(5, "+2");
+                array.put(6, "+3");
+                return array;
+            }
+        });
+
+        mBubbleSeekBar.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+            }
+
+            @Override
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+                Toast.makeText(Album.this, "" + progress, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+
             }
         });
 
@@ -566,7 +606,10 @@ public class Album extends AppCompatActivity {
                 clicked_button_redgreen = 0;
                 clicked_button_original = 1;
 
+                Log.d("Album", " 원본 세팅");
                 imageView.setImageBitmap(originalPicture);
+                Toast.makeText(Album.this, "원본 세팅", Toast.LENGTH_SHORT).show();
+
                 //Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.cow);
                 //Bitmap bitmap2 = resizeBitmap(1024, bitmap); // 이미지 크기 조정
                 //show_image.setImageBitmap(bitmap2);
@@ -608,6 +651,8 @@ public class Album extends AppCompatActivity {
                                 int change_red = rA;
 
                                 change_red = change_red + rangeA[i]*button_cnt;
+                                //change_red = change_red + 20;
+                                Log.d("Album ", "색 더함");
 
                                 if(change_red >= 0xFF)
                                     change_red = 0xFF;
@@ -1024,8 +1069,21 @@ public class Album extends AppCompatActivity {
                     Bitmap bitmap3 = rotateBitmap(bitmap2, degree);
 
                     albumImage = bitmap3;
-                    originalPicture = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
+                    // originalPicture = bitmap3.copy(Bitmap.Config.ARGB_8888, true);
                     imageView.setImageBitmap(albumImage);
+
+                    Bitmap bitmap11 = BitmapFactory.decodeFile(source);
+                    Log.d("Album ", " bitmap " + bitmap);
+
+
+                    // 이미지 크기 조정
+                    Bitmap bitmap22 = resizeBitmap(1024, bitmap11);
+
+                    // 회전 각도 값 가져옴
+                    float degree2 = getDegree(source);
+                    Bitmap bitmap33 = rotateBitmap(bitmap22, degree2);
+
+                    originalPicture = bitmap33;
 
                     // 이미지뷰 터치했을때
                     setImageViewTouchListener(imageView);

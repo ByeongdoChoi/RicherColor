@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/album_container"
+    android:background="#f3bb71"
     android:orientation="vertical"
     tools:context=".Album">
 
@@ -13,85 +14,193 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_weight="2">
+        android:layout_weight="0.5">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/select" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/back"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/textAlbum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/text_font"
+                android:text="Richer Color"
+                android:textSize="40dp"
+                android:textColor="#ffffff"
+                />
+
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:layout_width="200dp"
+                android:background="#ffffff"
+                android:layout_below="@+id/textAlbum"
+                android:layout_height="1dp" />
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="4">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            android:background="@drawable/layout_background"
+            android:layout_weight="3"
+            android:gravity="center">
 
-            <Button
-                android:id="@+id/btn_redgreen"
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="적록색맹" />
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:adjustViewBounds="true"
+                android:src="@drawable/photolibrary" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_yellowblue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="황청색맹" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
 
-            <Button
-                android:id="@+id/btn_original"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="원본" />
+            android:layout_weight="1">
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/button_minus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="30dp"
+                        android:textSize="30dp"
+                        android:text="-"
+                        />
+
+                    <TextView
+                        android:id="@+id/button_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="30dp"
+                        android:text="1"
+                        />
+
+                    <Button
+                        android:id="@+id/button_plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:textSize="30dp"
+                        android:text="+"
+                        />
+
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/text_font"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="20dp"
+                        android:text="적록색맹" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/text_font"
+                        android:layout_alignParentRight="true"
+                        android:textSize="20dp"
+                        android:layout_marginRight="20dp"
+                        android:text="황청색맹" />
+                </RelativeLayout>
+
+                <com.xw.repo.BubbleSeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    app:bsb_auto_adjust_section_mark="true"
+                    app:bsb_second_track_color="#000000"
+                    app:bsb_track_color="#000000"
+                    app:bsb_track_size="8dp"
+                    app:bsb_section_count="6"
+                    app:bsb_max="6"
+                    app:bsb_progress="3"
+                    app:bsb_section_text_position="below_section_mark"
+                    app:bsb_show_section_mark="true"
+                    app:bsb_show_section_text="true"
+                    app:bsb_show_thumb_text="true"
+                    app:bsb_thumb_text_size="0dp"
+                    app:bsb_hide_bubble="true"
+                    app:bsb_touch_to_seek="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+
+
+                    <Button
+                        android:id="@+id/btn_redgreen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="적록색맹" />
+
+                    <Button
+                        android:id="@+id/btn_yellowblue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="황청색맹" />
+
+                    <Button
+                        android:id="@+id/btn_original"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="원본" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:padding="10dp"
-            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/button_minus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
-                android:textSize="30dp"
-                android:text="-"
-                />
 
-            <TextView
-                android:id="@+id/button_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30dp"
-                android:text="1"
-                />
-
-            <Button
-                android:id="@+id/button_plus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:textSize="30dp"
-                android:text="+"
-                />
-
-        </LinearLayout>
     </LinearLayout>
+
+
 </LinearLayout>

@@ -30,7 +30,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:text="사진촬영"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/text_font"
                 android:textSize="30dp"
                 android:textColor="#ffffff" />
 
@@ -68,7 +68,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:text="앨범선택"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/text_font"
                 android:textSize="30dp"
                 android:textColor="#ffffff" />
 
@@ -108,7 +108,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:text="명화감상"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/text_font"
                 android:textSize="30dp"
                 android:textColor="#ffffff" />
 
@@ -134,21 +134,22 @@
 
             <ImageView
                 android:id="@+id/picture_test"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:src="@drawable/test" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
                 android:layout_toRightOf="@+id/picture_test"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="30dp"
                 android:text="색맹 테스트"
-                android:fontFamily="monospace"
+                android:fontFamily="@font/text_font"
                 android:textSize="30dp"
                 android:textColor="#ffffff" />
 
