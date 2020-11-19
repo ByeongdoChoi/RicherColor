@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,9 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.skydoves.balloon.Balloon;
+import com.skydoves.balloon.BalloonAnimation;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -300,7 +304,6 @@ public class Famous extends AppCompatActivity {
                         }
                     }
                     bitmap2 = bitmap2.copy(Bitmap.Config.ARGB_8888, true);
-
                     bitmap2.setPixels(changed_pixels,0,w,0,0,w,h);
                     image.setImageBitmap(bitmap2);
                 }
@@ -931,6 +934,7 @@ public class Famous extends AppCompatActivity {
         ImageView image = findViewById(R.id.artimg);
         image.setImageResource(img[0]);
 
+
         CURRENT_INDEX = 0;
     }
 
@@ -970,4 +974,5 @@ public class Famous extends AppCompatActivity {
             image.setImageResource(img[num]);
         }
     }
+
 }

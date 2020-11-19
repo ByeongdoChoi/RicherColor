@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTest(){
-        Intent intent = new Intent(this,rgbtest.class);
+        Intent intent = new Intent(this,ColorTest1.class);
         startActivity(intent);
     }
 
