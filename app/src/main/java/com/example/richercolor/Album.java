@@ -1530,6 +1530,10 @@ public class Album extends AppCompatActivity {
     public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
         double ratio = (double) targetWidth / (double) source.getWidth();
         int targetHeight = (int) (source.getHeight() * ratio);
+
+        targetWidth = 768;
+        targetHeight = 1024;
+
         Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
         if (result != source)
             source.recycle();
