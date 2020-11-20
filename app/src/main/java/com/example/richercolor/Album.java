@@ -46,6 +46,8 @@ import java.io.IOException;
 public class Album extends AppCompatActivity {
 
     ImageView imageView;    // 이미지뷰
+    Button select_img; //사진 선택 이미지
+
     Bitmap albumImage;      // 앨범에서 불러온 사진을 비트맵 담을 객체
     float touchX, touchY;   // 사진에서 터치하는 좌표
 
@@ -132,6 +134,8 @@ public class Album extends AppCompatActivity {
         setContentView(R.layout.activity_album);
 
         imageView = findViewById(R.id.imageView);
+        select_img = (Button)findViewById(R.id.selectImage);
+
         //show_image = findViewById(R.id.imageView);
         container = findViewById(R.id.album_container);
 
@@ -144,6 +148,16 @@ public class Album extends AppCompatActivity {
                     getImage();
                     setPicture = true;
                 }
+            }
+        });
+
+        select_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if (!setPicture) {
+                    getImage();
+                    setPicture = true;
+                //}
             }
         });
 

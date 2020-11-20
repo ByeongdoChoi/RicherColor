@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/album_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/album_container"
     android:background="#f3bb71"
     android:orientation="vertical"
     tools:context=".Album">
@@ -12,9 +12,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:layout_weight="0.5"
         android:gravity="center"
-        android:layout_weight="0.5">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,10 +23,9 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/back"
-                android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
-                />
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/back" />
 
             <TextView
                 android:id="@+id/textAlbum"
@@ -35,16 +34,15 @@
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/text_font"
                 android:text="Richer Color"
-                android:textSize="40dp"
                 android:textColor="#ffffff"
-                />
+                android:textSize="40dp" />
 
             <LinearLayout
-                android:layout_centerInParent="true"
                 android:layout_width="200dp"
-                android:background="#ffffff"
+                android:layout_height="1dp"
                 android:layout_below="@+id/textAlbum"
-                android:layout_height="1dp" />
+                android:layout_centerInParent="true"
+                android:background="#ffffff" />
         </RelativeLayout>
 
     </LinearLayout>
@@ -52,14 +50,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="4">
+        android:layout_weight="4"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/layout_background"
             android:layout_weight="3"
+            android:background="@drawable/layout_background"
             android:gravity="center">
 
             <ImageView
@@ -69,49 +67,62 @@
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:adjustViewBounds="true"
                 android:src="@drawable/photolibrary" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center">
+
+            <Button
+                android:text="사진 선택"
+                android:id="@+id/selectImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
+            android:layout_weight="1"
 
-            android:layout_weight="1">
-                <LinearLayout
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/button_minus"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginRight="30dp"
+                    android:text="-"
+                    android:textSize="30dp" />
 
-                    <Button
-                        android:id="@+id/button_minus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="30dp"
-                        android:textSize="30dp"
-                        android:text="-"
-                        />
+                <TextView
+                    android:id="@+id/button_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="30dp" />
 
-                    <TextView
-                        android:id="@+id/button_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="30dp"
-                        android:text="1"
-                        />
+                <Button
+                    android:id="@+id/button_plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="+"
+                    android:textSize="30dp" />
 
-                    <Button
-                        android:id="@+id/button_plus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="30dp"
-                        android:textSize="30dp"
-                        android:text="+"
-                        />
+            </LinearLayout>
 
-                </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -120,26 +131,26 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/text_font"
                         android:layout_marginLeft="20dp"
-                        android:textSize="20dp"
-                        android:text="적록색맹" />
+                        android:fontFamily="@font/text_font"
+                        android:text="적록색맹"
+                        android:textSize="20dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/text_font"
                         android:layout_alignParentRight="true"
-                        android:textSize="20dp"
                         android:layout_marginRight="20dp"
-                        android:text="황청색맹" />
+                        android:fontFamily="@font/text_font"
+                        android:text="황청색맹"
+                        android:textSize="20dp" />
                 </RelativeLayout>
 
                 <com.xw.repo.BubbleSeekBar
@@ -149,27 +160,26 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     app:bsb_auto_adjust_section_mark="true"
-                    app:bsb_second_track_color="#000000"
-                    app:bsb_track_color="#000000"
-                    app:bsb_track_size="8dp"
-                    app:bsb_section_count="6"
+                    app:bsb_hide_bubble="true"
                     app:bsb_max="6"
                     app:bsb_progress="3"
+                    app:bsb_second_track_color="#000000"
+                    app:bsb_section_count="6"
                     app:bsb_section_text_position="below_section_mark"
                     app:bsb_show_section_mark="true"
                     app:bsb_show_section_text="true"
                     app:bsb_show_thumb_text="true"
                     app:bsb_thumb_text_size="0dp"
-                    app:bsb_hide_bubble="true"
-                    app:bsb_touch_to_seek="true" />
+                    app:bsb_touch_to_seek="true"
+                    app:bsb_track_color="#000000"
+                    app:bsb_track_size="8dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
-
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
 
                     <Button
@@ -196,8 +206,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>
