@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,14 +32,14 @@ public class Photo extends AppCompatActivity {
     //저장된 이미지에 접근할 수 있는 uri
     Uri contentUri;
 
-    ImageView image1;
+    //ImageView image1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
 
-        image1 = findViewById(R.id.photo_imageView);
+        //image1 = findViewById(R.id.photo_imageView);
         init();
     }
 
@@ -68,7 +69,10 @@ public class Photo extends AppCompatActivity {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
         startActivityForResult(intent,1);
 
+
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -76,17 +80,21 @@ public class Photo extends AppCompatActivity {
         Log.d("Photo ", resultCode+"");
 
         if(resultCode==RESULT_OK){
-            Log.d("Photo ","이미지 로딩");
-            Bitmap bitmap = BitmapFactory.decodeFile(contentUri.getPath());
-            //image1.setImageBitmap(bitmap);
+//            Log.d("Photo ","이미지 로딩");
+//            Bitmap bitmap = BitmapFactory.decodeFile(contentUri.getPath());
+//            //image1.setImageBitmap(bitmap);
+//
+//            // 이미지 크기 조정
+//            Bitmap bitmap2 = resizeBitmap(1024, bitmap);
+//            image1.setImageBitmap(bitmap2);
+//
+//            Bitmap bitmap3 = rotateBitmap(bitmap2, 90);
 
-            // 이미지 크기 조정
-            Bitmap bitmap2 = resizeBitmap(1024, bitmap);
-            image1.setImageBitmap(bitmap2);
-
-            Bitmap bitmap3 = rotateBitmap(bitmap2, 90);
 
             galleryAddPic();
+
+            Intent intent = new Intent(Photo.this,MainActivity.class);
+            startActivity(intent);
 
             /*Intent intent = new Intent(getApplicationContext(), Album.class);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -96,7 +104,12 @@ public class Photo extends AppCompatActivity {
             Log.d("Photo ", "변환 완료");
             startActivity(intent);*/
         }
+        else if(resultCode==RESULT_CANCELED){
+            Intent intent = new Intent(Photo.this,MainActivity.class);
+            startActivity(intent);
+        }
     }
+
 
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -106,52 +119,53 @@ public class Photo extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
-    public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
-        double ratio = (double) targetWidth / (double) source.getWidth();
-        int targetHeight = (int) (source.getHeight() * ratio);
-        Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-        if (result != source)
-            source.recycle();
-        return result;
-    }
+//    public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
+//        double ratio = (double) targetWidth / (double) source.getWidth();
+//        int targetHeight = (int) (source.getHeight() * ratio);
+//        Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+//        if (result != source)
+//            source.recycle();
+//        return result;
+//    }
+//
+//    public float getDegree(String source) {
+//        try {
+//            ExifInterface exif = new ExifInterface(source);
+//            int degree = 0;
+//            int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+//            switch (ori) {
+//                case ExifInterface.ORIENTATION_ROTATE_90:
+//                    degree = 90;
+//                    break;
+//                case ExifInterface.ORIENTATION_ROTATE_180:
+//                    degree = 180;
+//                    break;
+//                case ExifInterface.ORIENTATION_ROTATE_270:
+//                    degree = 270;
+//                    break;
+//            }
+//            return degree;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return 0.0f;
+//    }
+//
+//    public Bitmap rotateBitmap(Bitmap bitmap, float degree) {
+//        try {
+//            int width = bitmap.getWidth();
+//            int height = bitmap.getHeight();
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(degree);
+//
+//            Bitmap bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+//            //bitmap.recycle();
+//
+//            return bitmap2;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-    public float getDegree(String source) {
-        try {
-            ExifInterface exif = new ExifInterface(source);
-            int degree = 0;
-            int ori = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
-            switch (ori) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
-            }
-            return degree;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0.0f;
-    }
-
-    public Bitmap rotateBitmap(Bitmap bitmap, float degree) {
-        try {
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            Matrix matrix = new Matrix();
-            matrix.postRotate(degree);
-
-            Bitmap bitmap2 = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-            //bitmap.recycle();
-
-            return bitmap2;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

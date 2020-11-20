@@ -35,7 +35,7 @@ import static android.Manifest.permission.CAMERA;
 public class MainActivity extends AppCompatActivity {
 
     public native void ConvertRGBtoGray(long matAddrInput, long matAddrResult);
-
+    private BackPressCloseHandler backPressCloseHandler;
 
     static {
         System.loadLibrary("opencv_java4");
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-
     Button takePhotoBtn;
     Button getPhotoBtn;
     Button viewArtBtn;
@@ -58,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(permission_list, 0);
@@ -118,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
+    }
 }
