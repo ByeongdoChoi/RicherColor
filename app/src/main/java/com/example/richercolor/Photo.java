@@ -37,7 +37,7 @@ public class Photo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo);
+        //setContentView(R.layout.activity_photo);
 
         //image1 = findViewById(R.id.photo_imageView);
         init();
@@ -68,8 +68,6 @@ public class Photo extends AppCompatActivity {
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
         startActivityForResult(intent,1);
-
-
     }
 
 
