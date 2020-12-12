@@ -68,6 +68,8 @@ public class Photo extends AppCompatActivity {
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
         startActivityForResult(intent,1);
+
+
     }
 
 
@@ -88,11 +90,10 @@ public class Photo extends AppCompatActivity {
 //
 //            Bitmap bitmap3 = rotateBitmap(bitmap2, 90);
 
-
             galleryAddPic();
 
-            Intent intent = new Intent(Photo.this,MainActivity.class);
-            startActivity(intent);
+            Intent intent1 = new Intent(Photo.this,MainActivity.class);
+            startActivity(intent1);
 
             /*Intent intent = new Intent(getApplicationContext(), Album.class);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -115,6 +116,8 @@ public class Photo extends AppCompatActivity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
+        Intent intent = new Intent(Photo.this,MainActivity.class);
+        startActivity(intent);
     }
 
 //    public Bitmap resizeBitmap(int targetWidth, Bitmap source) {
