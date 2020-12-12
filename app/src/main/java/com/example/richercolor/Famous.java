@@ -189,8 +189,8 @@ public class Famous extends AppCompatActivity {
     }
     private void initset(){
 
-        Bitmap Img = BitmapFactory.decodeResource(getResources(), img[0]);
-        Bitmap bitmap22 = resizeBitmap(1024, Img);
+        Img = BitmapFactory.decodeResource(getResources(), img[CURRENT_INDEX]);
+        bitmap22 = resizeBitmap(1024, Img);
 
         w = bitmap22.getWidth(); //원본의 w사이즈
         h = bitmap22.getHeight(); //원본의 h사이즈
@@ -501,8 +501,7 @@ public class Famous extends AppCompatActivity {
                 }
             }
             /******************************************/
-
-
+            Log.d("픽셀확인","change:"+changed_pixels+"w:"+w+"h:"+h);
 
             bitmap22.setPixels(changed_pixels, 0, w, 0, 0, w, h);
             image.setImageBitmap(bitmap22);
@@ -991,7 +990,9 @@ public class Famous extends AppCompatActivity {
 
         CURRENT_INDEX = 0;
         count =0;
-        image.setImageResource(img[count]);
+        Img = BitmapFactory.decodeResource(getResources(), img[CURRENT_INDEX]);
+        bitmap22 = resizeBitmap(1024, Img);
+        image.setImageBitmap(bitmap22);
         prevnum = 0;
 
 
@@ -1007,6 +1008,7 @@ public class Famous extends AppCompatActivity {
         }
         else{
             image.setImageResource(img[CURRENT_INDEX]);
+            initset();
         }
 
     }
@@ -1023,6 +1025,7 @@ public class Famous extends AppCompatActivity {
         }
         else{
             image.setImageResource(img[CURRENT_INDEX]);
+            initset();
         }
     }
 
